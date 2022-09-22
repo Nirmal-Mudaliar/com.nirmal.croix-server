@@ -1,5 +1,7 @@
 package com.nirmal.di
 
+import com.nirmal.data.repository.follow.FollowRepository
+import com.nirmal.data.repository.follow.FollowRepositoryImpl
 import com.nirmal.data.repository.user.UserRepository
 import com.nirmal.data.repository.user.UserRepositoryImpl
 import com.nirmal.util.Constants
@@ -15,6 +17,9 @@ val mainModule = module {
     }
     single<UserRepository> {
         UserRepositoryImpl(get())
+    }
+    single<FollowRepository> {
+        FollowRepositoryImpl(get())
     }
 
 }
