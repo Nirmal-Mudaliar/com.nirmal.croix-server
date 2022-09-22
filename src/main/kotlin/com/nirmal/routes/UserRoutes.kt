@@ -1,7 +1,7 @@
 package com.nirmal.routes
 
 
-import com.nirmal.controller.user.UserController
+import com.nirmal.repository.user.UserRepository
 import com.nirmal.data.models.User
 import com.nirmal.data.request.CreateAccountRequest
 import com.nirmal.response.BasicApiResponse
@@ -14,18 +14,15 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 
-fun Route.userRoutes() {
+fun Route.createUserRoute(userRepository: UserRepository) {
 
-    route("/api/posts"){
-        get {
-            call.respondText(
-                "Hellodf "
-            )
-        }
-    }
-
-
-    val userController: UserController by inject()
+//    route("/api/posts"){
+//        get {
+//            call.respondText(
+//                "Hellodf "
+//            )
+//        }
+//    }
 
     route("/api/user/create") {
         post {
@@ -42,7 +39,7 @@ fun Route.userRoutes() {
                 )
                 return@post
             }
-            val userExists = userController.getUserByEmail(request.email) != null
+            val userExists = userRepository.getUserByEmail(request.email) != null
             if (userExists) {
                 call.respond(
                     BasicApiResponse(
@@ -53,7 +50,7 @@ fun Route.userRoutes() {
                 return@post
             }
 
-            userController.createUser(
+            userRepository.createUser(
                 user = User(
                     email = request.email,
                     username = request.username,

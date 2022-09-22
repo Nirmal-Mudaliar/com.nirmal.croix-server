@@ -1,18 +1,18 @@
 package com.nirmal.plugins
 
-import com.nirmal.routes.userRoutes
+import com.nirmal.repository.user.UserRepository
+import com.nirmal.routes.createUserRoute
 import io.ktor.server.routing.*
-import io.ktor.http.*
-import io.ktor.server.http.content.*
 import io.ktor.server.application.*
-import io.ktor.server.response.*
-import io.ktor.server.request.*
+import org.koin.ktor.ext.inject
 
 fun Application.configureRouting() {
-    
+
+    val userRepository: UserRepository by inject()
+
 
     routing {
-        userRoutes()
+        createUserRoute(userRepository)
 //        get("/api") {
 //            call.respondText("Hello World!")
 //        }

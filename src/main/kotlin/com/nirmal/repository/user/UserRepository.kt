@@ -1,9 +1,9 @@
-package com.nirmal.controller.user
+package com.nirmal.repository.user
 
 import com.nirmal.data.models.User
 
 
-interface UserController {
+interface UserRepository {
 
     suspend fun createUser(user: User)
 

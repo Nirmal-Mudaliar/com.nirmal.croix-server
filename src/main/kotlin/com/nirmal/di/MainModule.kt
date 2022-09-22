@@ -1,7 +1,7 @@
 package com.nirmal.di
 
-import com.nirmal.controller.user.UserController
-import com.nirmal.controller.user.UserControllerImpl
+import com.nirmal.repository.user.UserRepository
+import com.nirmal.repository.user.UserRepositoryImpl
 import com.nirmal.util.Constants
 import org.koin.dsl.module
 import org.litote.kmongo.coroutine.coroutine
@@ -13,8 +13,8 @@ val mainModule = module {
         val client = KMongo.createClient().coroutine
         client.getDatabase(Constants.DATABASE_NAME)
     }
-    single<UserController> {
-        UserControllerImpl(get())
+    single<UserRepository> {
+        UserRepositoryImpl(get())
     }
 
 }

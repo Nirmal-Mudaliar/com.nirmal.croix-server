@@ -1,12 +1,12 @@
-package com.nirmal.controller.user
+package com.nirmal.repository.user
 
 import com.nirmal.data.models.User
 import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.eq
 
-class UserControllerImpl(
+class UserRepositoryImpl(
     db: CoroutineDatabase
-): UserController {
+): UserRepository {
 
     val users = db.getCollection<User>()
 
