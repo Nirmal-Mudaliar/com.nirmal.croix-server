@@ -1,7 +1,8 @@
 package com.nirmal.plugins
 
-import com.nirmal.repository.user.UserRepository
+import com.nirmal.data.repository.user.UserRepository
 import com.nirmal.routes.createUserRoute
+import com.nirmal.routes.loginUser
 import io.ktor.server.routing.*
 import io.ktor.server.application.*
 import org.koin.ktor.ext.inject
@@ -13,6 +14,7 @@ fun Application.configureRouting() {
 
     routing {
         createUserRoute(userRepository)
+        loginUser(userRepository)
 //        get("/api") {
 //            call.respondText("Hello World!")
 //        }

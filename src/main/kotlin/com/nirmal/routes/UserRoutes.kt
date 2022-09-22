@@ -1,9 +1,10 @@
 package com.nirmal.routes
 
 
-import com.nirmal.repository.user.UserRepository
+import com.nirmal.data.repository.user.UserRepository
 import com.nirmal.data.models.User
 import com.nirmal.data.request.CreateAccountRequest
+import com.nirmal.data.request.LoginRequest
 import com.nirmal.response.BasicApiResponse
 import com.nirmal.util.ApiResponseMessages
 import io.ktor.http.*
@@ -11,7 +12,6 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import org.koin.ktor.ext.inject
 
 
 fun Route.createUserRoute(userRepository: UserRepository) {
@@ -24,8 +24,8 @@ fun Route.createUserRoute(userRepository: UserRepository) {
 //        }
 //    }
 
-    route("/api/user/create") {
-        post {
+    post("/api/user/create") {
+
             val request = call.receiveOrNull<CreateAccountRequest>() ?: kotlin.run {
                 call.respond(HttpStatusCode.BadRequest)
                 return@post
@@ -65,7 +65,43 @@ fun Route.createUserRoute(userRepository: UserRepository) {
             call.respond(
                 BasicApiResponse(successful = true)
             )
+
+    }
+}
+
+fun Route.loginUser(userRepository: UserRepository) {
+
+    post("/api/user/login") {
+        val request = call.receiveOrNull<LoginRequest>() ?: kotlin.run {
+            call.respond(HttpStatusCode.BadRequest)
+            return@post
+        }
+        if (request.email.isBlank() || request.password.isBlank()) {
+            call.respond(HttpStatusCode.BadRequest)
+            return@post
+        }
+        val isCorrectPassword = userRepository.doesPasswordForEachUserMatch(
+            request.email,
+            request.password
+        )
+        if (isCorrectPassword) {
+            call.respond(
+                HttpStatusCode.OK,
+                BasicApiResponse(
+                    successful = true,
+                    message = null
+                )
+            )
+        } else {
+            call.respond(
+                HttpStatusCode.OK,
+                BasicApiResponse(
+                    successful = false,
+                    message = ApiResponseMessages.INVALID_CREDENTIALS
+                )
+            )
         }
     }
+
 }
 

@@ -1,7 +1,7 @@
 package com.nirmal.di
 
-import com.nirmal.repository.user.UserRepository
-import com.nirmal.repository.user.UserRepositoryImpl
+import com.nirmal.data.repository.user.UserRepository
+import com.nirmal.data.repository.user.UserRepositoryImpl
 import com.nirmal.util.Constants
 import org.koin.dsl.module
 import org.litote.kmongo.coroutine.coroutine
