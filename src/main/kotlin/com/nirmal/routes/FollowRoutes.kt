@@ -3,6 +3,7 @@ package com.nirmal.routes
 import com.nirmal.data.repository.follow.FollowRepository
 import com.nirmal.data.request.FollowUpdateRequest
 import com.nirmal.data.response.BasicApiResponse
+import com.nirmal.service.FollowService
 import com.nirmal.util.ApiResponseMessages
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -10,18 +11,15 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-fun Route.followUser(followRepository: FollowRepository) {
+fun Route.followUser(followService: FollowService) {
     post("/api/following/follow") {
         val request = call.receiveOrNull<FollowUpdateRequest>() ?: kotlin.run {
             call.respond(HttpStatusCode.BadRequest)
             return@post
         }
 
-        val didUserExist = followRepository.followUserIfExists(
-            request.followingUserId,
-            request.followedUserId
-        )
-        if (didUserExist) {
+
+        if (followService.followUserIfExists(request)) {
             call.respond(
                 HttpStatusCode.OK,
                 BasicApiResponse(
@@ -41,7 +39,7 @@ fun Route.followUser(followRepository: FollowRepository) {
     }
 }
 
-fun Route.unfollowUser(followRepository: FollowRepository) {
+fun Route.unfollowUser(followService: FollowService) {
     delete("/api/following/unfollow") {
 
         val request = call.receiveOrNull<FollowUpdateRequest>() ?: kotlin.run {
@@ -49,10 +47,7 @@ fun Route.unfollowUser(followRepository: FollowRepository) {
             return@delete
         }
 
-        val didUserExists = followRepository.unFollowUserIfExists(
-            request.followingUserId,
-            request.followedUserId
-        )
+        val didUserExists = followService.unFollowUserIfExists(request)
         if (didUserExists) {
             call.respond(
                 HttpStatusCode.OK,
