@@ -2,7 +2,7 @@ package com.nirmal.routes
 
 import com.nirmal.data.repository.follow.FollowRepository
 import com.nirmal.data.request.FollowUpdateRequest
-import com.nirmal.response.BasicApiResponse
+import com.nirmal.data.response.BasicApiResponse
 import com.nirmal.util.ApiResponseMessages
 import io.ktor.http.*
 import io.ktor.server.application.*

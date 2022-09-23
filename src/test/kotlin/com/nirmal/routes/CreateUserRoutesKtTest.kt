@@ -7,7 +7,7 @@ import com.nirmal.data.request.CreateAccountRequest
 import com.nirmal.di.testModule
 import com.nirmal.plugins.configureSerialization
 import com.nirmal.repository.user.FakeUserRepository
-import com.nirmal.response.BasicApiResponse
+import com.nirmal.data.response.BasicApiResponse
 import com.nirmal.util.ApiResponseMessages
 import io.ktor.http.*
 import io.ktor.server.application.*

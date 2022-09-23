@@ -1,4 +1,4 @@
-package com.nirmal.response
+package com.nirmal.data.response
 
 data class BasicApiResponse(
     val successful: Boolean,
