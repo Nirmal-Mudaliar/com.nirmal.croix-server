@@ -19,6 +19,11 @@ class CommentRepositoryImpl(
         return deletedCount > 0
     }
 
+    override suspend fun deleteCommentsFromPost(postId: String): Boolean {
+        val deletedCount = comments.deleteMany(Comment::postId eq postId).deletedCount
+        return deletedCount > 0
+    }
+
     override suspend fun getCommentsForPost(postId: String): List<Comment> {
         return comments.find(Comment::postId eq postId).toList()
     }

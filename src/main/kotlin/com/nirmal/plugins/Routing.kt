@@ -40,7 +40,7 @@ fun Application.configureRouting() {
         // Posts
         createPost(postService)
         getPostByFollows(postService)
-        deletePost(postService, likeService)
+        deletePost(postService, commentService, likeService)
 
         // likes
         likeParent(likeService = likeService)

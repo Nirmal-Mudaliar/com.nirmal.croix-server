@@ -87,15 +87,6 @@ fun Route.deleteComment(
             }
             val comment = commentService.getCommentById(request.commentId)
             if (comment?.userId != call.userId) {
-//                println(comment?.userId)
-//                println(call.userId)
-//                call.respond(
-//                    HttpStatusCode.OK,
-//                    BasicApiResponse(
-//                        false,
-//                        call.userId + " " + comment?.comment
-//                    )
-//                )
                 call.respond(HttpStatusCode.Unauthorized)
                 return@delete
             }

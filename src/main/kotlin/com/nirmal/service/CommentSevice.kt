@@ -32,6 +32,10 @@ class CommentService(
         return commentRepository.deleteComment(commentId)
     }
 
+    suspend fun deleteCommentsforPost(postId: String): Boolean {
+        return commentRepository.deleteCommentsFromPost(postId)
+    }
+
     suspend fun getCommentsForPost(postId: String): List<Comment> {
         return commentRepository.getCommentsForPost(postId)
     }
@@ -39,6 +43,7 @@ class CommentService(
     suspend fun getCommentById(commentId: String): Comment? {
         return commentRepository.getComment(commentId)
     }
+
 
     sealed class ValidationEvent {
         object ErrorEmptyField: ValidationEvent()

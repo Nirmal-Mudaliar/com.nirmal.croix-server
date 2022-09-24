@@ -74,6 +74,7 @@ fun Route.getPostByFollows(
 
 fun Route.deletePost(
     postService: PostService,
+    commentService: CommentService,
     likeService: LikeService,
 ) {
     authenticate {
@@ -92,8 +93,11 @@ fun Route.deletePost(
             if (post.userId == call.userId) {
                 postService.deletePost(postId = request.postId)
                 likeService.deleteLikesForParent(request.postId)
-                // TODO: DELETE COMMENTS FROM POST
-                call.respond(HttpStatusCode.OK)
+                commentService.deleteCommentsforPost(request.postId)
+                call.respond(
+                    HttpStatusCode.OK,
+                    BasicApiResponse(successful = true)
+                )
             } else {
                 call.respond(HttpStatusCode.Unauthorized)
             }
