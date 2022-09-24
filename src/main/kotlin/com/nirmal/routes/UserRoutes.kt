@@ -3,8 +3,6 @@ package com.nirmal.routes
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import com.nirmal.data.repository.user.UserRepository
-import com.nirmal.data.models.User
 import com.nirmal.data.request.CreateAccountRequest
 import com.nirmal.data.request.LoginRequest
 import com.nirmal.data.response.AuthResponse
@@ -19,7 +17,7 @@ import io.ktor.server.routing.*
 import java.util.*
 
 
-fun Route.createUserRoute(userService: UserService) {
+fun Route.createUser(userService: UserService) {
 
     post("/api/user/create") {
 

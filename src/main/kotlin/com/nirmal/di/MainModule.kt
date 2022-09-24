@@ -1,14 +1,16 @@
 package com.nirmal.di
 
+import com.nirmal.data.repository.comment.CommentRepository
+import com.nirmal.data.repository.comment.CommentRepositoryImpl
 import com.nirmal.data.repository.follow.FollowRepository
 import com.nirmal.data.repository.follow.FollowRepositoryImpl
+import com.nirmal.data.repository.likes.LikeRepository
+import com.nirmal.data.repository.likes.LikeRepositoryImpl
 import com.nirmal.data.repository.post.PostRepository
 import com.nirmal.data.repository.post.PostRepositoryImpl
 import com.nirmal.data.repository.user.UserRepository
 import com.nirmal.data.repository.user.UserRepositoryImpl
-import com.nirmal.service.FollowService
-import com.nirmal.service.PostService
-import com.nirmal.service.UserService
+import com.nirmal.service.*
 import com.nirmal.util.Constants
 import org.koin.dsl.module
 import org.litote.kmongo.coroutine.coroutine
@@ -21,6 +23,7 @@ val mainModule = module {
         client.getDatabase(Constants.DATABASE_NAME)
     }
 
+    // User
     single<UserRepository> {
         UserRepositoryImpl(get())
     }
@@ -28,6 +31,7 @@ val mainModule = module {
         UserService(get())
     }
 
+    // Follow
     single<FollowRepository> {
         FollowRepositoryImpl(get())
     }
@@ -35,11 +39,28 @@ val mainModule = module {
         FollowService(get())
     }
 
+    // Post
     single<PostRepository> {
         PostRepositoryImpl(get())
     }
     single {
         PostService(get())
+    }
+
+    // Like
+    single<LikeRepository> {
+        LikeRepositoryImpl(get())
+    }
+    single {
+        LikeService(get())
+    }
+
+    // Comment
+    single<CommentRepository> {
+        CommentRepositoryImpl(get())
+    }
+    single {
+        CommentService(get())
     }
 
 }

@@ -1,12 +1,7 @@
 package com.nirmal.plugins
 
-import com.nirmal.data.repository.follow.FollowRepository
-import com.nirmal.data.repository.post.PostRepository
-import com.nirmal.data.repository.user.UserRepository
 import com.nirmal.routes.*
-import com.nirmal.service.FollowService
-import com.nirmal.service.PostService
-import com.nirmal.service.UserService
+import com.nirmal.service.*
 import io.ktor.server.routing.*
 import io.ktor.server.application.*
 import org.koin.ktor.ext.inject
@@ -19,6 +14,10 @@ fun Application.configureRouting() {
 
     val postService: PostService by inject()
 
+    val likeService: LikeService by inject()
+
+    val commentService: CommentService by inject()
+
     val jwtIssuer = environment.config.property("jwt.domain").getString()
     val jwtAudience = environment.config.property("jwt.audience").getString()
     val jwtSecret = environment.config.property("jwt.secret").getString()
@@ -26,7 +25,7 @@ fun Application.configureRouting() {
 
     routing {
         // User routes
-        createUserRoute(userService)
+        createUser(userService)
         loginUser(
             userService = userService,
             jwtIssuer = jwtIssuer,
@@ -35,11 +34,22 @@ fun Application.configureRouting() {
         )
 
         // Following
-        followUser(followService)
+        followUser(followService, userService)
         unfollowUser(followService)
 
         // Posts
-        createPostRoute(postService, userService)
+        createPost(postService, userService)
+        getPostByFollows(postService, userService)
+        deletePost(postService, likeService, userService)
+
+        // likes
+        likeParent(likeService = likeService, userService = userService)
+        unLikeParent(likeService = likeService, userService = userService)
+
+        // Comments
+        createComment(commentService, userService)
+        deleteComment(commentService, likeService, userService)
+        getCommentForPost(commentService)
 
 
     }
