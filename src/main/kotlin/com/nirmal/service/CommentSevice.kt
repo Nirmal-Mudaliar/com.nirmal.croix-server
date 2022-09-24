@@ -8,9 +8,9 @@ import com.nirmal.util.Constants
 class CommentService(
     private val commentRepository: CommentRepository
 ) {
-    suspend fun createComment(request: CreateCommentRequest): ValidationEvent {
+    suspend fun createComment(request: CreateCommentRequest, userId: String): ValidationEvent {
         request.apply {
-            if (comment.isBlank() || userId.isBlank() || postId.isBlank()) {
+            if (comment.isBlank() || postId.isBlank()) {
                 return ValidationEvent.ErrorEmptyField
             }
             if (comment.length > Constants.MAX_COMMENT_LENGTH) {
@@ -20,7 +20,7 @@ class CommentService(
         commentRepository.createComment(
             Comment(
                 comment = request.comment,
-                userId = request.userId,
+                userId = userId,
                 postId = request.postId,
                 timestamp = System.currentTimeMillis()
             )
@@ -34,6 +34,10 @@ class CommentService(
 
     suspend fun getCommentsForPost(postId: String): List<Comment> {
         return commentRepository.getCommentsForPost(postId)
+    }
+
+    suspend fun getCommentById(commentId: String): Comment? {
+        return commentRepository.getComment(commentId)
     }
 
     sealed class ValidationEvent {

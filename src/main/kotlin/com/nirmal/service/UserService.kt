@@ -42,12 +42,20 @@ class UserService(
         return userRepository.doesEmailBelongToUserId(email, userId)
     }
 
+    suspend fun isValidPassword(enteredPassword: String, actualPassword: String): Boolean {
+        return enteredPassword == actualPassword
+    }
+
     suspend fun doesPasswordForEachUserMatch(request: LoginRequest): Boolean {
         return userRepository.doesPasswordForEachUserMatch(
             request.email,
             request.password
         )
 
+    }
+
+    suspend fun getUserByEmail(email: String): User? {
+        return userRepository.getUserByEmail(email)
     }
 
     sealed class ValidationEvent() {

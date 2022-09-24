@@ -24,6 +24,6 @@ class CommentRepositoryImpl(
     }
 
     override suspend fun getComment(commentId: String): Comment? {
-        return comments.findOneById(Comment::id eq commentId)
+        return comments.findOneById(commentId)
     }
 }

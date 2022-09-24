@@ -7,16 +7,16 @@ class FollowService(
     private val followRepository: FollowRepository
 ) {
 
-    suspend fun followUserIfExists(request: FollowUpdateRequest): Boolean {
+    suspend fun followUserIfExists(request: FollowUpdateRequest, followingUserId: String): Boolean {
         return followRepository.followUserIfExists(
-            request.followingUserId,
+            followingUserId,
             request.followedUserId
         )
     }
 
-    suspend fun unFollowUserIfExists(request: FollowUpdateRequest): Boolean {
+    suspend fun unFollowUserIfExists(request: FollowUpdateRequest, followingUserId: String): Boolean {
         return followRepository.unFollowUserIfExists(
-            request.followingUserId,
+            followingUserId,
             request.followedUserId
         )
     }
