@@ -1,5 +1,7 @@
 package com.nirmal.di
 
+import com.nirmal.data.repository.activity.ActivityRepository
+import com.nirmal.data.repository.activity.ActivityRepositoryImpl
 import com.nirmal.data.repository.comment.CommentRepository
 import com.nirmal.data.repository.comment.CommentRepositoryImpl
 import com.nirmal.data.repository.follow.FollowRepository
@@ -15,6 +17,7 @@ import com.nirmal.util.Constants
 import org.koin.dsl.module
 import org.litote.kmongo.coroutine.coroutine
 import org.litote.kmongo.reactivestreams.KMongo
+import kotlin.math.sin
 
 
 val mainModule = module {
@@ -61,6 +64,14 @@ val mainModule = module {
     }
     single {
         CommentService(get())
+    }
+
+    // Activity
+    single<ActivityRepository> {
+        ActivityRepositoryImpl(get())
+    }
+    single {
+        ActivityService(get(), get(), get())
     }
 
 }

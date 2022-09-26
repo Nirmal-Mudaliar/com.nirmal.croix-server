@@ -2,8 +2,9 @@ package com.nirmal.routes
 
 import com.nirmal.data.request.LikeUpdateRequest
 import com.nirmal.data.response.BasicApiResponse
+import com.nirmal.data.utils.ParentType
+import com.nirmal.service.ActivityService
 import com.nirmal.service.LikeService
-import com.nirmal.service.UserService
 import com.nirmal.util.ApiResponseMessages
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -14,6 +15,7 @@ import io.ktor.server.routing.*
 
 fun Route.likeParent(
     likeService: LikeService,
+    activityService: ActivityService
 ) {
     authenticate {
         post("/api/like") {
@@ -21,8 +23,14 @@ fun Route.likeParent(
                 call.respond(HttpStatusCode.BadRequest)
                 return@post
             }
-            val likeSuccessful = likeService.likeParent(call.userId, request.parentId)
+            val likeSuccessful = likeService.likeParent(call.userId, request.parentId, request.parentType)
             if (likeSuccessful) {
+                activityService.addLikeActivity(
+                    byUserId = call.userId,
+                    parentType = ParentType.fromType(request.parentType),
+                    parentId = request.parentId
+
+                )
                 call.respond(
                     HttpStatusCode.OK,
                     BasicApiResponse(

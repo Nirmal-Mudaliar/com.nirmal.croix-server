@@ -1,8 +1,11 @@
 package com.nirmal.routes
 
+import com.nirmal.data.models.Activity
 import com.nirmal.data.repository.follow.FollowRepository
 import com.nirmal.data.request.FollowUpdateRequest
 import com.nirmal.data.response.BasicApiResponse
+import com.nirmal.data.utils.ActivityType
+import com.nirmal.service.ActivityService
 import com.nirmal.service.FollowService
 import com.nirmal.service.UserService
 import com.nirmal.util.ApiResponseMessages
@@ -15,6 +18,7 @@ import io.ktor.server.routing.*
 
 fun Route.followUser(
     followService: FollowService,
+    activityService: ActivityService
 ) {
 
     authenticate {
@@ -25,6 +29,15 @@ fun Route.followUser(
                 return@post
             }
             if (followService.followUserIfExists(request, call.userId)) {
+                activityService.createActivity(
+                    Activity(
+                        timestamp = System.currentTimeMillis(),
+                        byUserId = call.userId,
+                        toUserId = request.followedUserId,
+                        type = ActivityType.FollowedUser.type,
+                        parentId = ""
+                    )
+                )
                 call.respond(
                     HttpStatusCode.OK,
                     BasicApiResponse(

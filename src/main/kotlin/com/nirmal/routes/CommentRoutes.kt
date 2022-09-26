@@ -3,6 +3,8 @@ package com.nirmal.routes
 import com.nirmal.data.request.CreateCommentRequest
 import com.nirmal.data.request.DeleteCommentRequest
 import com.nirmal.data.response.BasicApiResponse
+import com.nirmal.data.utils.ParentType
+import com.nirmal.service.ActivityService
 import com.nirmal.service.CommentService
 import com.nirmal.service.LikeService
 import com.nirmal.service.UserService
@@ -17,6 +19,7 @@ import io.ktor.server.routing.*
 
 fun Route.createComment(
     commentService: CommentService,
+    activityService: ActivityService
 ) {
     authenticate {
         post("/api/comment/create") {
@@ -44,6 +47,10 @@ fun Route.createComment(
                     )
                 }
                 is CommentService.ValidationEvent.Success -> {
+                    activityService.addCommentActivity(
+                        byUserId = call.userId,
+                        postId = request.postId,
+                    )
                     call.respond(
                         HttpStatusCode.OK,
                         BasicApiResponse(

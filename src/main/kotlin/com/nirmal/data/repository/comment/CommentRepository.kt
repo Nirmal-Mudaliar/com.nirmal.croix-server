@@ -4,7 +4,7 @@ import com.nirmal.data.models.Comment
 
 interface CommentRepository {
 
-    suspend fun createComment(comment: Comment)
+    suspend fun createComment(comment: Comment): String
 
     suspend fun deleteComment(commentId: String): Boolean
 
