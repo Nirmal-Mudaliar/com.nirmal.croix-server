@@ -14,4 +14,6 @@ interface UserRepository {
     suspend fun doesPasswordForEachUserMatch(email: String, enteredPassword: String): Boolean
 
     suspend fun doesEmailBelongToUserId(email: String, userId: String): Boolean
+
+    suspend fun searchForUsers(query: String): List<User>
 }

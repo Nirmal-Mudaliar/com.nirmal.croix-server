@@ -31,7 +31,7 @@ val mainModule = module {
         UserRepositoryImpl(get())
     }
     single {
-        UserService(get())
+        UserService(get(), get())
     }
 
     // Follow

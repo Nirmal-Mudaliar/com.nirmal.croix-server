@@ -1,16 +1,14 @@
 package com.nirmal.service
 
 import com.nirmal.data.models.User
+import com.nirmal.data.repository.follow.FollowRepository
 import com.nirmal.data.repository.user.UserRepository
 import com.nirmal.data.request.CreateAccountRequest
-import com.nirmal.data.request.LoginRequest
-import com.nirmal.data.response.BasicApiResponse
-import com.nirmal.util.ApiResponseMessages
-import io.ktor.server.application.*
-import io.ktor.server.response.*
+import com.nirmal.data.response.UserResponseItem
 
 class UserService(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val followRepository: FollowRepository
 ) {
     suspend fun doesUserWithEmailExist(email: String): Boolean {
         return userRepository.getUserByEmail(email) != null
@@ -46,16 +44,22 @@ class UserService(
         return enteredPassword == actualPassword
     }
 
-    suspend fun doesPasswordForEachUserMatch(request: LoginRequest): Boolean {
-        return userRepository.doesPasswordForEachUserMatch(
-            request.email,
-            request.password
-        )
-
-    }
-
     suspend fun getUserByEmail(email: String): User? {
         return userRepository.getUserByEmail(email)
+    }
+
+    suspend fun searchForUsers(query: String, userId: String): List<UserResponseItem> {
+        val users = userRepository.searchForUsers(query)
+        val followsByUser = followRepository.getFollowsByUser(userId = userId)
+        return users.map { user ->
+            val isFollowing: Boolean = followsByUser.find { it.followedUserId == user.id } != null
+            UserResponseItem(
+                username = user.username,
+                profilePictureUrl = user.profileImageUrl,
+                bio = user.bio,
+                isFollowing = isFollowing
+            )
+        }
     }
 
     sealed class ValidationEvent() {

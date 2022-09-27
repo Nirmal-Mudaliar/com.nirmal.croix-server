@@ -34,6 +34,7 @@ fun Application.configureRouting() {
             jwtAudience = jwtAudience,
             jwtSecret = jwtSecret
         )
+        searchUser(userService)
 
         // Following
         followUser(followService, activityService)
@@ -52,6 +53,9 @@ fun Application.configureRouting() {
         createComment(commentService, activityService)
         deleteComment(commentService, likeService)
         getCommentForPost(commentService)
+
+        // Activities
+        getActivities(activityService)
 
 
     }

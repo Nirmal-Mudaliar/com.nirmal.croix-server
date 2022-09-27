@@ -3,14 +3,17 @@ package com.nirmal.routes
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.nirmal.data.models.User
 import com.nirmal.data.request.CreateAccountRequest
 import com.nirmal.data.request.LoginRequest
 import com.nirmal.data.response.AuthResponse
 import com.nirmal.data.response.BasicApiResponse
 import com.nirmal.service.UserService
 import com.nirmal.util.ApiResponseMessages
+import com.nirmal.util.QueryParams
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -114,5 +117,27 @@ fun Route.loginUser(
         }
     }
 
+}
+
+fun Route.searchUser(
+    userService: UserService
+) {
+    authenticate {
+        get("/api/user/search") {
+            val query = call.parameters[QueryParams.PARAM_QUERY]
+            if (query == null || query.isBlank()) {
+                call.respond(
+                    HttpStatusCode.OK,
+                    listOf<User>()
+                )
+                return@get
+            }
+            val searchResults = userService.searchForUsers(query = query, userId = call.userId)
+            call.respond(
+                HttpStatusCode.OK,
+                searchResults
+            )
+        }
+    }
 }
 
