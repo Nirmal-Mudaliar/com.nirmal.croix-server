@@ -1,5 +1,6 @@
 package com.nirmal.di
 
+import com.google.gson.Gson
 import com.nirmal.data.repository.activity.ActivityRepository
 import com.nirmal.data.repository.activity.ActivityRepositoryImpl
 import com.nirmal.data.repository.comment.CommentRepository
@@ -72,6 +73,10 @@ val mainModule = module {
     }
     single {
         ActivityService(get(), get(), get())
+    }
+
+    single {
+        Gson()
     }
 
 }

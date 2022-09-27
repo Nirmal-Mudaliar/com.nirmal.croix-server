@@ -4,6 +4,8 @@ import com.nirmal.data.models.User
 import com.nirmal.data.repository.follow.FollowRepository
 import com.nirmal.data.repository.user.UserRepository
 import com.nirmal.data.request.CreateAccountRequest
+import com.nirmal.data.request.UpdateProfileRequest
+import com.nirmal.data.response.ProfileResponse
 import com.nirmal.data.response.UserResponseItem
 
 class UserService(
@@ -24,7 +26,7 @@ class UserService(
                 bio = "",
                 githubUrl = null,
                 linkedinUrl = null,
-                instagramUrl = null
+                instagramUrl = null,
             )
         )
     }
@@ -36,8 +38,24 @@ class UserService(
         return ValidationEvent.Success
     }
 
-    suspend fun doesEmailBelongToUserId(email: String, userId: String): Boolean {
-        return userRepository.doesEmailBelongToUserId(email, userId)
+    suspend fun getUserProfile(userId: String, callerUserId: String): ProfileResponse? {
+        val user = userRepository.getUserById(userId)  ?: return null
+        val isOwnProfile = userId == callerUserId
+        return ProfileResponse(
+            username = user.username,
+            bio = user.bio,
+            followerCount = user.followerCount,
+            followingCount = user.followingCount,
+            postCount = user.postCount,
+            profilePictureUrl = user.profileImageUrl,
+            topSkillUrls = user.skills,
+            gitHubUrl = user.githubUrl,
+            instagramUrl = user.instagramUrl,
+            linkedInUrl = user.linkedinUrl,
+            isOwnProfile = isOwnProfile,
+            isFollowing = if (!isOwnProfile) followRepository.doesUserFollow(followingUserId = callerUserId, followedUserId = userId) else false
+
+            )
     }
 
     suspend fun isValidPassword(enteredPassword: String, actualPassword: String): Boolean {
@@ -60,6 +78,10 @@ class UserService(
                 isFollowing = isFollowing
             )
         }
+    }
+
+    suspend fun updateUser(userId: String, profileImageUrl: String, updateProfileRequest: UpdateProfileRequest): Boolean {
+        return userRepository.updateUser(userId, profileImageUrl, updateProfileRequest)
     }
 
     sealed class ValidationEvent() {

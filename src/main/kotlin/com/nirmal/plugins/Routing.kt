@@ -4,6 +4,7 @@ import com.nirmal.routes.*
 import com.nirmal.service.*
 import io.ktor.server.routing.*
 import io.ktor.server.application.*
+import io.ktor.server.http.content.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureRouting() {
@@ -35,6 +36,9 @@ fun Application.configureRouting() {
             jwtSecret = jwtSecret
         )
         searchUser(userService)
+        getUserProfile(userService)
+        getPostsForProfile(postService)
+        updateUserProfile(userService)
 
         // Following
         followUser(followService, activityService)
@@ -57,6 +61,9 @@ fun Application.configureRouting() {
         // Activities
         getActivities(activityService)
 
+        static {
+            resources("static")
+        }
 
     }
 }

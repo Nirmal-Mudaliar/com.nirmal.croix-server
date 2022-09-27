@@ -4,6 +4,7 @@ import com.nirmal.di.mainModule
 import io.ktor.server.application.*
 import com.nirmal.plugins.*
 import org.koin.ktor.plugin.Koin
+import java.nio.file.Paths
 
 
 fun main(args: Array<String>): Unit =
@@ -22,5 +23,4 @@ fun Application.module() {
     configureHTTP()
     configureSecurity()
     configureRouting()
-
 }
