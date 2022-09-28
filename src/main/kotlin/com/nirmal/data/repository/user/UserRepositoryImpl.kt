@@ -68,6 +68,8 @@ class UserRepositoryImpl(
 
             )
 
-        ).toList()
+        )
+            .descendingSort(User::followerCount)
+            .toList()
     }
 }
