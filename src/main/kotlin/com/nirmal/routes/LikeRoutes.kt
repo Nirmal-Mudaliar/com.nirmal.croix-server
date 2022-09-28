@@ -6,6 +6,7 @@ import com.nirmal.data.utils.ParentType
 import com.nirmal.service.ActivityService
 import com.nirmal.service.LikeService
 import com.nirmal.util.ApiResponseMessages
+import com.nirmal.util.QueryParams
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -78,6 +79,22 @@ fun Route.unLikeParent(
                 )
             }
 
+        }
+    }
+}
+
+fun Route.getLikesForParent(likeService: LikeService) {
+    authenticate {
+        get("/api/like/parent") {
+            val parentId = call.parameters[QueryParams.PARAM_PARENT_ID] ?: kotlin.run {
+                call.respond(HttpStatusCode.BadRequest)
+                return@get
+            }
+            val usersWhoLikedParent = likeService.getUsersWhoLikedParent(parentId = parentId, callerUserId = call.userId)
+            call.respond(
+                HttpStatusCode.OK,
+                usersWhoLikedParent
+            )
         }
     }
 }

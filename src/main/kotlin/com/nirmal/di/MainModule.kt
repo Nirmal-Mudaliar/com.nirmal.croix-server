@@ -56,7 +56,7 @@ val mainModule = module {
         LikeRepositoryImpl(get())
     }
     single {
-        LikeService(get())
+        LikeService(get(), get(), get())
     }
 
     // Comment

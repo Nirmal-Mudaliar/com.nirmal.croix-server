@@ -52,6 +52,7 @@ fun Application.configureRouting() {
         // likes
         likeParent(likeService = likeService, activityService = activityService)
         unLikeParent(likeService = likeService)
+        getLikesForParent(likeService)
 
         // Comments
         createComment(commentService, activityService)

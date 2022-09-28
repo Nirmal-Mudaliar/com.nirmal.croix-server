@@ -10,6 +10,8 @@ interface UserRepository {
 
     suspend fun getUserById(id: String): User?
 
+    suspend fun getUsersById(userIds: List<String>): List<User>
+
     suspend fun getUserByEmail(email: String): User?
 
     suspend fun updateUser(userId: String, profileImageUrl: String, updateProfileRequest: UpdateProfileRequest): Boolean
